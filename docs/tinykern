@@ -1,0 +1,7 @@
+TinyKern
+--------
+
+TinyKern is meant to be a combination micro- and megalithic kernel. Multitasking
+will be supported, but not protected mode. More complex drivers (such as
+filesystem, networking, etc.) will be implemented outside the kernel, and can be
+loaded at run time.

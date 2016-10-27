@@ -1,0 +1,14 @@
+TinyKern
+--------
+
+A small and simple kernel that aims to not get in the way of the end-user's
+processes.
+
+
+Required Tools
+--------------
+
+The following tools are required to build TinyKern:
+ * GCC or Clang
+ * make
+ * ld
