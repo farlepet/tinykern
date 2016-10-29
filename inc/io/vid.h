@@ -1,6 +1,8 @@
 #ifndef VID_H
 #define VID_H
 
+#include <io/serial.h>
+
 #define FMT_SPEC '%'
 
 /**
@@ -16,6 +18,13 @@ void kputc(char ch);
  * @param str String to print
  */
 void kputs(char *str);
+
+/**
+ * Set the output serial port for kputc
+ *
+ * @param port Base IO address of serial port to use
+ */
+void video_set_serial_port(enum serial_port port);
 
 /**
  * Takes a format string and a list of arguments as input, and produces a

@@ -5,6 +5,7 @@
 
 // NOTE: The following may not be true for all machines!
 enum serial_port {
+    SER_NULL = 0x000,
     SER_COM1 = 0x3F8,
     SER_COM2 = 0x2F8,
     SER_COM3 = 0x3E8,
@@ -38,6 +39,14 @@ char serial_getc(enum serial_port port);
  */
 void serial_putc(enum serial_port port, char ch);
 
+/**
+ * Write bytes from a buffer to the serial port
+ *
+ * @param port The base IO address of the serial port to write to
+ * @param buf Buffer containing bytes to write
+ * @param len Number of bytes to write
+ */
+void serial_write(enum serial_port port, const u8 *buf, int len);
 
 
 // Get the 16-bit divisor for any given baud rate

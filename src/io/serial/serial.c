@@ -31,3 +31,11 @@ void serial_putc(enum serial_port port, char ch) {
     while(!serial_empt_trans(port)) {}
     outb(port, (u8)ch);
 }
+
+void serial_write(enum serial_port port, const u8 *buf, int len) {
+    while(len) {
+        while(!serial_empt_trans(port)) {}
+        outb(port, *buf);
+        buf++; len--;
+    }
+}
