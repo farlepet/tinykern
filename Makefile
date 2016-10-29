@@ -15,7 +15,7 @@ LDFLAGS    = -melf_i386 -T link_x86.ld
 
 ifeq ($(shell $(CC) -v 2>&1 | grep -c "clang version"), 1)
 CFLAGS    += -Weverything \
-			 -Wno-date-time
+			 -Wno-date-time -Wno-gnu-binary-literal -Wno-language-extension-token
 endif
 
 
