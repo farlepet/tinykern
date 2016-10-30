@@ -3,8 +3,8 @@ SRC        = $(MAINDIR)/src
 
 SRCS       = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/*/*.c) $(wildcard $(SRC)/*/*/*.c)
 ASSRCS     = $(wildcard $(SRC)/*.s) $(wildcard $(SRC)/*/*.s) $(wildcard $(SRC)/*/*/*.s)
-OBJS       = $(patsubst %.c,%.o,$(SRCS))
-ASOBJS     = $(patsubst %.s,%.o,$(ASSRCS))
+OBJS       = $(patsubst %.c,%.c.o,$(SRCS))
+ASOBJS     = $(patsubst %.s,%.s.o,$(ASSRCS))
 
 CC         = clang
 
@@ -15,7 +15,7 @@ LDFLAGS    = -melf_i386 -T link_x86.ld
 
 ifeq ($(shell $(CC) -v 2>&1 | grep -c "clang version"), 1)
 CFLAGS    += -Weverything \
-			 -Wno-date-time -Wno-gnu-binary-literal -Wno-language-extension-token
+			 -Wno-date-time -Wno-gnu-binary-literal -Wno-language-extension-token -Wno-reserved-id-macro -Wno-packed
 endif
 
 
@@ -26,11 +26,11 @@ link:   $(OBJS) $(ASOBJS)
 all: link
 
 
-%.o: %.c
+%.c.o: %.c
 	@echo -e "\033[32m  \033[1mCC\033[21m  \033[34m$<\033[0m"
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-%.o: %.s
+%.s.o: %.s
 	@echo -e "\033[32m  \033[1mAS\033[21m  \033[34m$<\033[0m"
 	@$(CC) $(ASFLAGS) -c -o $@ $<
 
