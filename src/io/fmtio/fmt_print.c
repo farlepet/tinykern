@@ -210,6 +210,7 @@ int fmt_print(char *out, const char *format, __builtin_va_list varg) {
             case 'g':
             case 'G':
                 (void)va_arg(varg, double);
+                // TODO: Floating points?
                 ZERO_ALL_VID();
                 break;
             
@@ -257,10 +258,10 @@ int fmt_print(char *out, const char *format, __builtin_va_list varg) {
 
             case 'p':
                 temp = (ptr_t)va_arg(varg, ptr_t);
-                temp = (ptr_t)print_int(temp, 16, 1, width, padzeros, showsign, signspace, 1 /* Should this be upper or lower 
-                case? */, out);
+                temp = (ptr_t)print_int(temp, 16, 1, width, padzeros, showsign, signspace, 1, out);
                 nchars += temp;
                 out += temp;
+                ZERO_ALL_VID();
                 break;
 
             case 'a':

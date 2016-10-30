@@ -5,6 +5,18 @@
 
 #define FMT_SPEC '%'
 
+
+enum klog_level {
+    KLOG_DETAIL,
+    KLOG_INFO,
+    KLOG_INITINFO,
+    KLOG_INIT,
+    KLOG_WARN,
+    KLOG_ERR,
+    KLOG_FATAL
+};
+
+
 /**
  * Print a character to the selected output device
  *
@@ -57,5 +69,14 @@ int sprintf(char *out, const char *fmt, ...);
  * @return the number of characters printed
  */
 int kprintf(const char *fmt, ...);
+
+/**
+ * If lvl is greater than or equal to the current log level, it prints a formatted string
+ *
+ * @param lvl message level
+ * @param fmt format string
+ * @param ... argument list
+ */
+int klog(enum klog_level lvl, const char *fmt, ...);
 
 #endif
