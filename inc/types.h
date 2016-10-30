@@ -13,7 +13,8 @@ typedef unsigned long long u64; //!< Unsigned 64 bit value
 
 typedef unsigned int ptr_t;
 
-#define __packed __attribute__((packed))
+#define __packed     __attribute__((packed))
+#define __aligned(A) __attribute__((aligned(A)))
 
 #endif
 
