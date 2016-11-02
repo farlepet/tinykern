@@ -1,21 +1,23 @@
 #ifndef MEM_GDT_H
 #define MEM_GDT_H
 
+#include <proc/tss.h>
+#include <io/vid.h>
 #include <types.h>
 
 typedef struct gdt_desc {
-    u16 size;
-    u32 offset;
+    u16 size;   // Size of GDT - 1
+    u32 offset; // Location of GDT
 } __packed gdt_desc_t;
 
 typedef struct gdt_entry {
-    u16 limit_low:16;
-    u16 base_low:16;
-    u8  base_med:8;
-    u8  access:8;
-    u8  limit_high:4;
-    u8  flags:4;
-    u8  base_high:8;
+    u16 limit_low:16; // Lower 16 bits of limit
+    u16 base_low:16;  // Lower 16 bits of base
+    u8  base_med:8;   // Middle 8 bits of base
+    u8  access:8;     // Access bits
+    u8  limit_high:4; // Upper 4 bits of limit
+    u8  flags:4;      // Flag bits
+    u8  base_high:8;  // Upper 8 bits of base
 
 } __packed gdt_entry_t;
 
@@ -48,6 +50,8 @@ enum gdt_access_bits {
 };
 
 
+
+
 /**
  * Load the Global Descriptor Table
  *
@@ -60,6 +64,10 @@ extern void gdt_lgdt(gdt_desc_t *desc);
  */
 extern void gdt_seg_reload(void);
 
+/**
+ * Tell the processor where the TSS is located withing the GDT
+ */
+extern void gdt_load_tss(void);
 
 
 /**
@@ -77,5 +85,9 @@ void gdt_init(void);
  * @param flags Flags
  */
 void gdt_create_entry(gdt_entry_t *ent, u32 base, u32 limit, u8 access, u8 flags);
+
+
+
+void gdt_print_entry(enum klog_level elvl, u16 idx);
 
 #endif

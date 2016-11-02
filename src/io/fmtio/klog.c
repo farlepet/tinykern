@@ -1,4 +1,5 @@
 #include <io/vid.h>
+#include <mem.h>
 
 #define KLOG_MAX_CHARS 1024
 
@@ -12,6 +13,7 @@ int klog(enum klog_level lvl, const char *fmt, ...) {
         __builtin_va_start(varg, fmt);
 
         char tmp[KLOG_MAX_CHARS];
+        memset(tmp, ' ', KLOG_MAX_CHARS); 
         int ret = fmt_print(tmp, fmt, varg);
         kputs(tmp);
 

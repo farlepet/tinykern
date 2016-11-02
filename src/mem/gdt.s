@@ -15,3 +15,10 @@ gdt_seg_reload:
     ljmp $0x08, $gdt_seg_reload.flush
 gdt_seg_reload.flush:
     ret
+
+.global gdt_load_tss
+gdt_load_tss:
+    mov $0x18, %ax
+    ltr %ax
+    ret
+
