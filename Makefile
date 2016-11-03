@@ -9,7 +9,7 @@ ASOBJS     = $(patsubst %.s,%.s.o,$(ASSRCS))
 CC         = clang
 
 CFLAGS     = -m32 -I$(MAINDIR)/inc -nostdlib -nostdinc -ffreestanding \
-			 -Wall -Wextra -Werror -DARCH_X86 -pipe -g
+			 -Wall -Wextra -Werror -DARCH_X86 -pipe -g -mno-sse -O2
 ASFLAGS    = -m32
 LDFLAGS    = -melf_i386 -T link_x86.ld
 

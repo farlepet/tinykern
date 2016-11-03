@@ -24,6 +24,9 @@ stack_top:
 .type _start, @function
 _start:
     mov $stack_top, %esp
+
+    push %eax # Magic Number
+    push %ebx # Multiboot Header pointer
     call __kernel_entry
     
 # Kernel returned, loop forever:
