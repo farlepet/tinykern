@@ -73,5 +73,13 @@ extern void paging_disable(void);
  */
 extern void paging_set_dir(pdir_ent_t *dir);
 
+/**
+ * Map a virtual address to a physical address via paging
+ *
+ * @param phys Physical address
+ * @param virt Virtual address
+ * @param flags Page flags
+ */
+void paging_map_page(void *phys, void *virt, u32 flags);
 
 #endif
