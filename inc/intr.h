@@ -3,6 +3,10 @@
 
 #include <types.h>
 
+#include <intr/exceptions.h>
+#include <intr/pic.h>
+#include <intr/idt.h>
+
 /**
  * Enable Interrupts
  */

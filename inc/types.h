@@ -15,6 +15,7 @@ typedef unsigned int ptr_t;
 
 #define NULL (void *)0;
 
+#define __hot        __attribute__((hot))
 #define __packed     __attribute__((packed))
 #define __noreturn   __attribute__((noreturn))
 #define __aligned(A) __attribute__((aligned(A)))

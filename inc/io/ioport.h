@@ -1,3 +1,6 @@
+#ifndef IO_IOPORT_H
+#define IO_IOPORT_H
+
 #include <types.h>
 
 static inline void outb(u16 port, u8 value) {
@@ -9,3 +12,5 @@ static inline u8 inb(u16 port) {
     asm volatile("inb %1, %0" : "=a" (ret) : "dN" (port));
     return ret;
 }
+
+#endif
