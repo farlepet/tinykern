@@ -1,23 +1,24 @@
 #include <mem/gdt.h>
 #include <io/vid.h>
+#include <mem.h>
 
 static gdt_entry_t GDT[4];
 static u8 system_stack[0x2000]; // Stack for interrupts
-static tss_struct_t TSS; // TSS
+static tss_struct_t TSS1; // TSS
 
 void gdt_init() {
     klog(KLOG_INIT, "Creating GDT");
     gdt_create_entry(&GDT[1], 0, 0xFFFFF, GDT_ACC_RW | GDT_ACC_EXEC | GDT_ACC_ONE | GDT_ACC_PRESENT, GDT_FLAG_SIZE_32B | GDT_FLAG_GRAN_4K);
     gdt_create_entry(&GDT[2], 0, 0xFFFFF, GDT_ACC_RW | GDT_ACC_ONE | GDT_ACC_PRESENT, GDT_FLAG_SIZE_32B | GDT_FLAG_GRAN_4K);
-    gdt_create_entry(&GDT[3], (u32)&TSS, sizeof(tss_struct_t), 0x89, GDT_FLAG_SIZE_32B);
+    gdt_create_entry(&GDT[3], (u32)&TSS1, sizeof(tss_struct_t), 0x89, GDT_FLAG_SIZE_32B);
 
-    TSS.esp0 = (u32)system_stack;
-    TSS.ss0  = 0x10;
-    TSS.cs   = 0x0B;
-    TSS.es   = TSS.ss = 0x13;
-    TSS.gs   = TSS.fs = 0x13;
-    TSS.gs   = 0x13;
-    TSS.iomap = sizeof(tss_struct_t);
+    TSS1.esp0 = (u32)system_stack + sizeof(system_stack);
+    TSS1.ss0  = 0x10;
+    TSS1.cs   = 0x08;
+    TSS1.es   = TSS1.ss = 0x10;
+    TSS1.gs   = TSS1.fs = 0x10;
+    TSS1.ds   = 0x10;
+    TSS1.iomap = sizeof(tss_struct_t);
     
     gdt_desc_t gdesc = { .size = (sizeof(GDT) - 1), .offset = (u32)GDT };
     klog(KLOG_INITINFO, "Loading GDT");
@@ -51,3 +52,4 @@ void gdt_print_entry(enum klog_level elvl, u16 idx) {
     klog(elvl, "        LIMIT: 0x  %06X", limit);
     klog(elvl, "        FLAGS: 0x%02X ACCESS: %02X", GDT[idx].flags, GDT[idx].access);
 }
+

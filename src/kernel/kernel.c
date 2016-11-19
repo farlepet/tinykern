@@ -1,7 +1,6 @@
 #include <intr/irq/pit.h>
 #include <mem/paging.h>
 #include <io/vga/vga.h>
-#include <mem/frames.h>
 #include <mem/alloc.h>
 #include <io/serial.h>
 #include <mem/gdt.h>
@@ -30,17 +29,18 @@ void __kernel_entry(mboot_header_t *mboot_head, u32 mboot_magic) {
     // Memory Management:
     gdt_init();
     paging_init();
-    frames_init(mboot_head->mem_upper * 1024);
     alloc_init(mboot_head->mem_upper * 1024);
     
     // IRQs:
-    pit_init(50);
+    pit_init(10);
    
     void *tpt0 = kalloc(32);
     void *tpt1 = kalloc_frame(64);
     void *tpt2 = kalloc(8);
 
     kprintf("tpt[0,1,2]: 0x%08X, 0x%08X, 0x%08X\n", tpt0, tpt1, tpt2);
+
+    *(u32 *)tpt0 = 32;
 
     __INT(0);
 

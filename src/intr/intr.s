@@ -1,4 +1,5 @@
 .globl intr_test_intr
+.type intr_test_intr, @function
 intr_test_intr:
     pusha
     push $str
@@ -8,6 +9,7 @@ intr_test_intr:
     iret
 
 .globl intr_dummy_int
+.type intr_dummy_int, @function
 intr_dummy_int:
     cli
     hlt

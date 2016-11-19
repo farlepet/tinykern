@@ -52,7 +52,7 @@ static int print_int(u32 num, u8 base, u8 u, u8 pad, u8 padzero, u8 possign, u8 
     {
         while(p--) *out++ = (padzero ? '0' : ' ');
         while(--i >= 0) *out++ = ans[i];
-        return (int)((pad > strlen(ans)) ? pad : strlen(ans)) + ((((possign || posspace) && !u) && onum >= 0) || ((onum < 0) && !u)) + 1;
+        return (int)(pad + ((((possign || posspace) && !u) && onum >= 0) || ((onum < 0) && !u)));
     }
     else
     {

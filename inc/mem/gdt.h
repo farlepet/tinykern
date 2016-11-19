@@ -49,7 +49,11 @@ enum gdt_access_bits {
     GDT_ACC_RING3    = 0b01100000  // Ring 3 (lowest priviledges)
 };
 
-
+#define __GDT_SET_BASE(ENTRY, BASE) { \
+    ENTRY.base_low  = (u16)BASE; \
+    ENTRY.base_med  = (u8)(BASE >> 16); \
+    ENTRY.base_high = (u8)(BASE >> 24); \
+}
 
 
 /**
@@ -68,6 +72,11 @@ extern void gdt_seg_reload(void);
  * Tell the processor where the TSS is located withing the GDT
  */
 extern void gdt_load_tss(void);
+
+/**
+ * Set which TSS to use
+ */
+extern void gdt_set_tss(u16 desc);
 
 
 /**
@@ -89,5 +98,6 @@ void gdt_create_entry(gdt_entry_t *ent, u32 base, u32 limit, u8 access, u8 flags
 
 
 void gdt_print_entry(enum klog_level elvl, u16 idx);
+
 
 #endif

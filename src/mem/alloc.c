@@ -1,4 +1,4 @@
-#include <mem/frames.h>
+#include <mem/paging.h>
 #include <mem/alloc.h>
 #include <io/vid.h>
 #include <mem.h>
@@ -24,6 +24,9 @@ void alloc_init(u32 mem) {
     mem_blocks[0][0].valid = 1;
 }
 
+/**
+ * Get the number of empty (invalid) entries
+ */
 static u32 empty_entries() {
     u32 i = 0, j, ent = 0;
     for(; i < n_memblk_blocks; i++) {
@@ -36,6 +39,9 @@ static u32 empty_entries() {
     return ent;
 }
 
+/**
+ * Allocate a block of memory entries
+ */
 static void alloc_mem_block() {
     if(n_memblk_blocks == MEMBLK_NBLOCKS) {
         klog(KLOG_ERR, "alloc_mem_block: Maximum number of memblk blocks (%d) exceeded!", MEMBLK_NBLOCKS);
@@ -46,6 +52,16 @@ static void alloc_mem_block() {
     mem_blocks[n_memblk_blocks++] = (memblk_t *)frame;
 }
 
+/**
+ * Find a memory entry with an appropiate size
+ *
+ * TODO: Look for smallest entry, instead of the first
+ *
+ * @param blk Pointer to variable in which to store the block
+ * @param ent Pointer to variable in which to store the entry
+ * @param length Length of memory region to find
+ * @param alignment Alignment of the memory region
+ */
 static int find_free_entry(u32 *blk, u32 *ent, u32 length, u32 alignment) {
     u32 i = 0, j;
     for(; i < n_memblk_blocks; i++) {
@@ -118,6 +134,12 @@ void *kalloc(u32 len) {
     }
     split_mem_entry(blk, ent, len, 0);
     mem_blocks[blk][ent].used = 1;
+
+    u32 i = 0;
+    for(; i < len; i+= 0x1000) {
+        paging_map_page((void *)(mem_blocks[blk][ent].addr + i), (void *)(mem_blocks[blk][ent].addr + i), 0x03);
+    }
+
     return (void *)mem_blocks[blk][ent].addr;
 }
 

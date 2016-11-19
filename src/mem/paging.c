@@ -1,6 +1,8 @@
+#include <mem/stack_trace.h>
 #include <mem/paging.h>
 #include <mem/frames.h>
 #include <io/vid.h>
+#include <intr.h>
 #include <mem.h>
 
 static pdir_ent_t pdir[1024] __aligned(4096);
@@ -62,5 +64,22 @@ void paging_map_page(void *phys, void *virt, u32 flags) {
         memset(table, 0, 4096);
 
         ((u32 *)(pdir[dir_idx].i & 0xFFFFF000))[tab_idx] = ((u32)phys | (flags & 0xFFF) | 0x01);
+    }
+}
+
+int page_present(u32 virtaddr) {
+    u32 dir_idx = virtaddr >> 22;
+    u32 tab_idx = (virtaddr >> 12) & 0x03FF;
+    if(pdir[dir_idx].b.present == 0) return 0;
+    ptable_ent_t *tab = (ptable_ent_t *)(pdir[dir_idx].i & 0xFFFFF000);
+    return tab[tab_idx].b.present;
+}
+
+void paging_check_ptr(void *virtaddr, char *name) {
+    if(!page_present((u32)virtaddr)) {
+        klog(KLOG_ERR, "paging_check_addr: (%s): <%08x> is not present!", name, virtaddr);
+        stack_trace(5, __builtin_frame_address(0), 0);
+        intr_disable();
+        for(;;) intr_hlt();
     }
 }

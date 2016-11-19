@@ -24,6 +24,7 @@ stack_top:
 .type _start, @function
 _start:
     mov $stack_top, %esp
+    mov %esp, %ebp
 
     push %eax # Magic Number
     push %ebx # Multiboot Header pointer

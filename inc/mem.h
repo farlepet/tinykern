@@ -21,4 +21,11 @@ void *memcpy(void *dest, const void *src, u32 n);
  */
 void *memset(void *s, int c, u32 n);
 
+#ifdef DEBUG_MEMCHK
+// Add pointer to list to check at every call of mem___
+void mem_add_check(void *ptr);
+#else
+#define mem_add_check(p)
+#endif
+
 #endif

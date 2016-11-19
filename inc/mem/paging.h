@@ -82,4 +82,11 @@ extern void paging_set_dir(pdir_ent_t *dir);
  */
 void paging_map_page(void *phys, void *virt, u32 flags);
 
+
+int page_present(u32 virtaddr);
+
+pdir_ent_t *paging_get_cr3(void);
+
+void paging_check_ptr(void *virtaddr, char *name);
+
 #endif
